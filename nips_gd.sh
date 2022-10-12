@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/dash
 
 Iter=10000
 EPS=255
