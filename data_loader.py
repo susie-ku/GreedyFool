@@ -9,7 +9,8 @@ import torch
 from scipy import ndimage, misc
 
 def load_img(filepath):
-    img = Image.open(filepath).convert('RGB')
+    if not os.path.isdir(filepath):
+        img = Image.open(filepath).convert('RGB')
     return img
 
 class McDataset(Dataset):
@@ -20,10 +21,11 @@ class McDataset(Dataset):
         imgs= os.listdir(self.image_dir)
         self.A_paths = []
         self.A_names = []
-        for img in imgs :
-            imgpath=os.path.join(self.image_dir,img)
-            self.A_paths.append(imgpath)
-            self.A_names.append(img.split('.')[0])
+        for img in imgs:
+            if not os.path.isdir(img):
+              imgpath=os.path.join(self.image_dir,img)
+              self.A_paths.append(imgpath)
+              self.A_names.append(img.split('.')[0])
         self.num = len(self.A_paths)
         self.A_size = len(self.A_paths)
         #print("read meta done")
@@ -41,3 +43,4 @@ class McDataset(Dataset):
                
         A_name = self.A_names[index % self.A_size]
         return {'A': A, 'path': A_path, 'name': A_name }
+
