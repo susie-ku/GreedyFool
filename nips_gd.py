@@ -84,7 +84,7 @@ def main():
         netG.eval()
         iter_start_time = time.time()
         input_A = data['A']
-        input_A = input_A.cuda(async=True)
+        input_A = input_A.cuda(non_blocking=True)
         real_A = Variable(input_A,requires_grad = False)
         image_names = data['name']
         
@@ -239,7 +239,7 @@ def main():
         _,pre=torch.max(logist_B,1)
         top1 = torch.sum(torch.eq(target.cpu().data.float(),pre.cpu().data.float()).float()) / input_A.size(0)
 
-        top1 = torch.from_numpy(np.asarray( [(1 - top1)*100 ])).float().cuda(async=True)
+        top1 = torch.from_numpy(np.asarray( [(1 - top1)*100 ])).float().cuda(non_blocking=True)
         Baccu[0].update(top1[0], input_A.size(0))
         
         time_count.append(time.time() - iter_start_time)
